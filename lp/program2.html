@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Model Transportasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+    <style>
+        .background-gradient {
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.5), rgba(255, 255, 255, 0.5));
+        }
+
+        .custom-input {
+            border: 2px solid #1E40AF;
+            text-align: center;
+            color: #1E40AF;
+            font-weight: bold;
+        }
+
+        .table-cell {
+            border: 2px solid #1E40AF;
+            width: 80px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .header-cell {
+            background-color: #34D399;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .supply-cell,
+        .demand-cell {
+            background-color: #1E3A8A;
+            color: #ffffff;
+        }
+
+        .result-title {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .results-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="background-gradient">
+    <header class="bg-gray-800 p-4 flex justify-between items-center">
+        <!-- Tombol Kembali dengan Icon -->
+        <button class="text-white px-4 py-2 rounded flex items-center" onclick="window.location.href='../index.html'">
+            <img src="../images/back.svg" class="w-7 h-7 mr-2" alt="Kembali">Kembali
+        </button>
+
+        <!-- Tulisan Tengah -->
+        <h1 class="text-white text-lg font-bold">PROGRAM MODEL TRANSPORTASI</h1>
+
+        <!-- Tombol Info -->
+        <button class="text-white px-4 py-2 rounded flex items-center">
+            <img src="../images/info.svg" class="w-7 h-7 mr-2" alt="Info">Info
+        </button>
+    </header>
+
+    <main class="flex flex-col items-center mt-8">
+        <div class="text-center mb-5">
+            <h2 class="text-xl font-bold mb-4">Input jumlah Baris dan Kolom</h2>
+            <form id="input-form" class="flex justify-center space-x-4">
+                <div>
+                    <label for="rows" class="block text-gray-700 font-bold mb-2">Baris</label>
+                    <input type="number" id="rows" name="rows" class="custom-input w-20 py-2 px-3" value="3" required>
+                </div>
+                <div>
+                    <label for="columns" class="block text-gray-700 font-bold mb-2">Kolom</label>
+                    <input type="number" id="columns" name="columns" class="custom-input w-20 py-2 px-3" value="4"
+                        required>
+                </div>
+                <div class="flex items-end mt-5">
+                    <button type="submit"
+                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-2 py-2.5 text-center me-2 mb-2 mt-3 ms-2">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-container" id="table-container"></div>
+
+        <!-- Metode dan Uji Optimalitas -->
+        <div class="flex justify-center w-full mt-8 px-8">
+            <div class="flex-1 max-w-md">
+                <h2 class="text-xl font-bold mb-4">Pilih Metode</h2>
+                <ul class="grid w-full gap-6 md:grid-cols-3">
+                    <li>
+                        <input type="checkbox" id="nwcr-option" value="nwcr" class="hidden peer" name="nwcr">
+                        <label for="nwcr-option"
+                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-600 rounded-lg cursor-pointer peer-checked:bg-gray-400 peer-checked:border-blue-600 peer-checked:text-black hover:bg-red-400 hover:text-black">
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">NWCR</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="least-cost-option" value="least-cost" class="hidden peer"
+                            name="leastCost">
+                        <label for="least-cost-option"
+                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-600 rounded-lg cursor-pointer peer-checked:bg-gray-400 peer-checked:border-blue-600 peer-checked:text-black hover:bg-red-400 hover:text-black">
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">Least Cost</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="vam-option" value="vam" class="hidden peer" name="vam">
+                        <label for="vam-option"
+                            class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-600 rounded-lg cursor-pointer peer-checked:bg-gray-400 peer-checked:border-blue-600 peer-checked:text-black hover:bg-red-400 hover:text-black">
+                            <div class="block">
+                                <div class="w-full text-lg font-semibold">VAM</div>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex-1 max-w-md ms-5">
+                <h2 class="text-xl font-bold mb-4">Uji Optimalitas</h2>
+                <div class="relative inline-block w-full">
+                    <select
+                        class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                        <option>Stepping Stone</option>
+                        <option>Multiplier</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M7 10l5 5 5-5H7z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button Mulai Perhitungan -->
+        <div class="flex items-end mt-5 mb-2">
+            <button type="submit" onclick="startCalculation()"
+                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-2 py-2.5 text-center me-2 mb-2 mt-3 ms-2">
+                Mulai Perhitungan
+            </button>
+        </div>
+
+        <div class="results-row" id="result-container"></div>
+
+        <div class="flex items-end mt-5 mb-2 hidden" id="optimality-test-button">
+            <button type="button" onclick="displayOptimalityTest()"
+                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-2 py-2.5 text-center me-2 mb-2 mt-3 ms-2">
+                Tampilkan Optimaly Test
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const defaultValues = [
+            [11, 13, 17, 14],
+            [16, 18, 14, 10],
+            [21, 24, 13, 10]
+        ];
+        const supplyValues = [250, 300, 400];
+        const demandValues = [200, 225, 275, 250];
+
+        function createTable(rows, columns) {
+            const tableContainer = document.getElementById('table-container');
+            tableContainer.innerHTML = '';
+
+            const table = document.createElement('div');
+            table.className = 'table';
+
+            // Create header row
+            const headerRow = document.createElement('div');
+            headerRow.className = 'flex';
+            createCell(headerRow, '', 'header-cell');
+            for (let j = 0; j < columns; j++) {
+                createCell(headerRow, 'D' + (j + 1), 'header-cell');
+            }
+            createCell(headerRow, 'Supply', 'header-cell');
+            table.appendChild(headerRow);
+
+            // Create rows
+            for (let i = 0; i < rows; i++) {
+                const row = document.createElement('div');
+                row.className = 'flex';
+                createCell(row, 'S' + (i + 1), 'header-cell');
+                for (let j = 0; j < columns; j++) {
+                    createCell(row, defaultValues[i][j]);
+                }
+                createCell(row, supplyValues[i], 'supply-cell');
+                table.appendChild(row);
+            }
+
+            // Create demand row
+            const demandRow = document.createElement('div');
+            demandRow.className = 'flex';
+            createCell(demandRow, 'Demand', 'header-cell');
+            for (let j = 0; j < columns; j++) {
+                createCell(demandRow, demandValues[j], 'demand-cell');
+            }
+            createCell(demandRow, supplyValues.reduce((a, b) => a + b, 0), 'supply-cell');
+            table.appendChild(demandRow);
+
+            tableContainer.appendChild(table);
+        }
+
+        function createCell(row, text, className = '') {
+            const cell = document.createElement('div');
+            cell.className = `table-cell ${className}`;
+            cell.textContent = text;
+            row.appendChild(cell);
+        }
+
+        document.getElementById('input-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const rows = parseInt(document.getElementById('rows').value);
+            const columns = parseInt(document.getElementById('columns').value);
+            createTable(rows, columns);
+        });
+
+        function startCalculation() {
+            const methods = [
+                { id: 'nwcr-option', display: displayNWCRTable },
+                { id: 'least-cost-option', display: displayLeastCostTable },
+                { id: 'vam-option', display: displayVAMTable }
+            ];
+
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.innerHTML = '';
+
+            let methodSelected = false;
+
+            methods.forEach(method => {
+                if (document.getElementById(method.id).checked) {
+                    methodSelected = true;
+                    const resultDiv = document.createElement('div');
+                    method.display(resultDiv);
+                    resultContainer.appendChild(resultDiv);
+                }
+            });
+
+            if (methodSelected) {
+                document.getElementById('optimality-test-button').classList.remove('hidden');
+            } else {
+                alert('Silakan pilih setidaknya satu metode sebelum memulai perhitungan.');
+            }
+        }
+
+        function displayNWCRTable(container) {
+            displayResultTable(container, 'NWCR Method Result', [
+                [200, 50, 0, 0],
+                [0, 175, 125, 0],
+                [0, 0, 150, 250]
+            ]);
+        }
+
+        function displayLeastCostTable(container) {
+            displayResultTable(container, 'Least Cost Method Result', [
+                [250, 0, 0, 0],
+                [0, 225, 75, 0],
+                [0, 0, 200, 200]
+            ]);
+        }
+
+        function displayVAMTable(container) {
+            displayResultTable(container, 'VAM Method Result', [
+                [200, 0, 50, 0],
+                [0, 225, 75, 0],
+                [0, 0, 150, 250]
+            ]);
+        }
+
+        function displayResultTable(container, titleText, allocations) {
+            const title = document.createElement('div');
+            title.className = 'result-title';
+            title.textContent = titleText;
+            container.appendChild(title);
+
+            const table = document.createElement('div');
+            table.className = 'table';
+
+            const headerRow = document.createElement('div');
+            headerRow.className = 'flex';
+            createCell(headerRow, '', 'header-cell');
+            for (let j = 0; j < 4; j++) {
+                createCell(headerRow, 'D' + (j + 1), 'header-cell');
+            }
+            createCell(headerRow, 'Supply', 'header-cell');
+            table.appendChild(headerRow);
+
+            const costs = [
+                [11, 13, 17, 14],
+                [16, 18, 14, 10],
+                [21, 24, 13, 10]
+            ];
+
+            for (let i = 0; i < allocations.length; i++) {
+                const row = document.createElement('div');
+                row.className = 'flex';
+                createCell(row, 'S' + (i + 1), 'header-cell');
+                for (let j = 0; j < 4; j++) {
+                    const content = allocations[i][j] > 0 ? `${allocations[i][j]} (${costs[i][j]})` : '-';
+                    createCell(row, content);
+                }
+                createCell(row, supplyValues[i], 'supply-cell');
+                table.appendChild(row);
+            }
+
+            const demandRow = document.createElement('div');
+            demandRow.className = 'flex';
+            createCell(demandRow, 'Demand', 'header-cell');
+            for (let j = 0; j < 4; j++) {
+                createCell(demandRow, demandValues[j], 'demand-cell');
+            }
+            createCell(demandRow, supplyValues.reduce((a, b) => a + b, 0), 'supply-cell');
+            table.appendChild(demandRow);
+
+            container.appendChild(table);
+        }
+
+        function displayOptimalityTest() {
+            alert('Optimality Test Functionality Coming Soon!');
+        }
+
+        window.onload = function () {
+            createTable(3, 4);
+        };
+    </script>
+</body>
+
+</html>

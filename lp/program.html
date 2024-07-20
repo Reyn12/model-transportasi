@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Model Transportasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .background-gradient {
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.5), rgba(255, 255, 255, 0.5));
+        }
+
+        .table-input,
+        .result-table {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .header img {
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            margin-left: -40px;
+            /* Adjust this value as necessary to perfectly center the title */
+        }
+
+        .method-selection,
+        .optimal-test {
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+        }
+
+        .method-selection label,
+        .optimal-test button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 9999px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .method-selection label input {
+            margin-right: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tfoot td {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen background-gradient">
+    <header class="relative flex justify-between items-center p-4 z-10 header">
+        <a href="../index.html" class="text-blue-500 ml-auto">
+            <img src="../images/left-arrow.png" class="w-10 h-10">
+        </a>
+        <h1 class="text-2xl font-bold header-title mr-auto">PROGRAM MODEL TRANSPORTASI</h1>
+    </header>
+    <hr class="border-t-2 border-gray-300">
+    <main class="relative flex flex-col items-center mt-8 z-10 px-4 lg:px-16">
+        <div class="table-input">
+            <h2 class="text-xl font-semibold mb-4 text-center">Tabel Input</h2>
+            <table class="min-w-full border-collapse border border-gray-400">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-300 px-4 py-2"></th>
+                        <th class="border border-gray-300 px-4 py-2">D1</th>
+                        <th class="border border-gray-300 px-4 py-2">D2</th>
+                        <th class="border border-gray-300 px-4 py-2">D3</th>
+                        <th class="border border-gray-300 px-4 py-2">D4</th>
+                        <th class="border border-gray-300 px-4 py-2">Supply</th>
+                    </tr>
+                </thead>
+                <tbody id="input-table-body">
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">S1</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.12</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.14</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.08</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.21</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">7500</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">S2</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.13</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.17</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.10</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.16</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">10000</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">S3</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.15</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.12</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.12</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">0.14</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">8100</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2 text-center">Demand</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">4200</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">8300</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">6300</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">7200</td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">26000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="flex justify-around w-full mt-8">
+            <div class="method-selection">
+                <h3 class="text-lg font-semibold mb-2">Pilih Metode</h3>
+                <label><input type="radio" name="method" value="NWC" checked>North West Corner (NWCR)</label>
+                <label><input type="radio" name="method" value="LeastCost">Least Cost Value</label>
+                <label><input type="radio" name="method" value="VAM">Vogel's Approximate Methode (VAM)</label>
+            </div>
+            <div class="optimal-test">
+                <h3 class="text-lg font-semibold mb-2">Optimality Test</h3>
+                <button onclick="calculateSteppingStone()">Stepping Stone</button>
+                <button>Multiplier</button>
+            </div>
+        </div>
+        <div id="result-tables" class="mt-8 w-full">
+            <div id="result-nwc" class="result-table">
+                <h2 class="text-xl font-semibold mb-4 text-center">Hasil Perhitungan - North West Corner (NWCR)</h2>
+                <table class="min-w-full border-collapse border border-gray-400">
+                    <thead>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2"></th>
+                            <th class="border border-gray-300 px-4 py-2">D1</th>
+                            <th class="border border-gray-300 px-4 py-2">D2</th>
+                            <th class="border border-gray-300 px-4 py-2">D3</th>
+                            <th class="border border-gray-300 px-4 py-2">D4</th>
+                            <th class="border border-gray-300 px-4 py-2">Supply</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nwc-table-body">
+                        <!-- Table rows will be inserted here by JavaScript -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 text-center">Demand</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">4200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">8300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">6300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">7200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">26000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div id="result-leastcost" class="result-table hidden">
+                <h2 class="text-xl font-semibold mb-4 text-center">Hasil Perhitungan - Least Cost Value</h2>
+                <table class="min-w-full border-collapse border border-gray-400">
+                    <thead>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2"></th>
+                            <th class="border border-gray-300 px-4 py-2">D1</th>
+                            <th class="border border-gray-300 px-4 py-2">D2</th>
+                            <th class="border border-gray-300 px-4 py-2">D3</th>
+                            <th class="border border-gray-300 px-4 py-2">D4</th>
+                            <th class="border border-gray-300 px-4 py-2">Supply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S1</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">7500</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S2</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">10000</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S3</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">8100</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 text-center">Demand</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">4200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">8300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">6300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">7200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">26000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div id="result-vam" class="result-table hidden">
+                <h2 class="text-xl font-semibold mb-4 text-center">Hasil Perhitungan - Vogel's Approximate Methode (VAM)
+                </h2>
+                <table class="min-w-full border-collapse border border-gray-400">
+                    <thead>
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2"></th>
+                            <th class="border border-gray-300 px-4 py-2">D1</th>
+                            <th class="border border-gray-300 px-4 py-2">D2</th>
+                            <th class="border border-gray-300 px-4 py-2">D3</th>
+                            <th class="border border-gray-300 px-4 py-2">D4</th>
+                            <th class="border border-gray-300 px-4 py-2">Supply</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S1</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">7500</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S2</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">10000</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">S3</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">-</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">8100</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2 text-center">Demand</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">4200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">8300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">6300</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">7200</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">26000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script src="../script/script.js"></script>
+</body>
+
+</html>
